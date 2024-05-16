@@ -17,7 +17,7 @@ $ cd stqam
 $ git remote add upstream https://git.uwaterloo.ca/stqam-1245/skeleton
 $ git fetch upstream
 $ git checkout -b main origin/main
-$ git merge upstream/main
+$ git merge upstream/main --allow-unrelated-histories
 $ git push origin main
 ```
 
