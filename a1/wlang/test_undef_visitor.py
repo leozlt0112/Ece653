@@ -11,4 +11,4 @@ class TestUndefVisitor(unittest.TestCase):
         uv = undef_visitor.UndefVisitor()
         uv.check(ast1)
         # UNCOMMENT to run the test
-        ## self.assertEquals (set ([ast.IntVar('z')]), uv.get_undefs ())
+        ## self.assertEqual (set ([ast.IntVar('z')]), uv.get_undefs ())
