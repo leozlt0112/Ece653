@@ -11,5 +11,5 @@ class TestStatsVisitor(unittest.TestCase):
         sv = stats_visitor.StatsVisitor()
         sv.visit(ast1)
         # UNCOMMENT to run the test
-        self.assertEquals(sv.get_num_stmts(), 2)
-        self.assertEquals(sv.get_num_vars(), 1)
+        self.assertEqual(sv.get_num_stmts(), 2)
+        self.assertEqual(sv.get_num_vars(), 1)
