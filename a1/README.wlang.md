@@ -12,7 +12,7 @@ A virtual environment is highly recommended
 
 ```
 $ python3 -m venv $(pwd)/venv
-$ . ./venv/activate
+$ . ./venv/bin/activate
 ```
 
 Install required packages
