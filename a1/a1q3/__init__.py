@@ -8,6 +8,9 @@ def token_with_escape(inpt, escape="^", separator="|"):
     """
     result = []
     token = ""
+    if inpt and inpt[0] == separator:
+        result.append(token)
+        inpt = inpt[1:]
     state = 0
     for c in inpt:
         if state == 0:
