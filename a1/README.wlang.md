@@ -53,7 +53,7 @@ wlang/
 
 ## Generate parser
 
-This step is only necessary if you change something in the grammar file (`whiel.ebnf`). To generate new `parser.py` follow the following:
+This step is only necessary if you change something in the grammar file (`while.ebnf`). To generate new `parser.py` follow the following:
 ```
 $ tatsu -o parser.py while.ebnf
 ```
