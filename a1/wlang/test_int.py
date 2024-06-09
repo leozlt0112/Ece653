@@ -40,3 +40,18 @@ class TestInt(unittest.TestCase):
         self.assertEqual(st.env["x"], 10)
         # no other variables in the state
         self.assertEqual(len(st.env), 1)
+    def test_Stmt_equal(self):
+        prg1 = "x:=10; y:=20"
+        ast1 = ast.parse_string(prg1)
+        prg2 = "x:=10; y:=20"
+        ast2 = ast.parse_string(prg2)
+        self.assertEqual(ast1,ast2)
+    def test_repr(self):
+        prg1 = "x:=20; z:=1;print_state"        
+        ast1 = ast.parse_string(prg1)
+        output_prg1 = repr(ast1)
+        self.assertEqual('{\n  x := 20;\n  z := 1;\n  print_state\n}', output_prg1)
+        print(output_prg1)
+
+    
+    

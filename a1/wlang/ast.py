@@ -101,8 +101,7 @@ class IfStmt(Stmt):
             and self.then_stmt == other.then_stmt
             and self.else_stmt == other.else_stmt
         )
-
-
+    
 class WhileStmt(Stmt):
     """While statement"""
 
@@ -249,7 +248,9 @@ class IntVar(Ast):
     def __hash__(self):
         return hash(self.name)
 
+"""
 
+"""
 def parse_file(filename):
     with open(filename) as f:
         text = f.read()
@@ -273,7 +274,10 @@ class AstVisitor(object):
 
     def visit(self, node, *args, **kwargs):
         """Visit a node."""
+        """  node.__class__.name __ __reserved, class returns name of class, name returns name of class
+        """
         method = "visit_" + node.__class__.__name__
+        """looks into object and returns any kind of methods and """
         visitor = getattr(self, method)
         return visitor(node, *args, **kwargs)
 
