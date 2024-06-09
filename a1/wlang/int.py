@@ -187,6 +187,7 @@ def _parse_args():
 def main():
     args = _parse_args()
     prg = ast.parse_file(args.in_file)
+    print(prg)
     st = State()
     interp = Interpreter()
     interp.run(prg, st)
