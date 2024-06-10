@@ -1,2 +1,1 @@
-x := 10;
-print_state
+x := 10;skip
