@@ -245,6 +245,48 @@ class TestInt(unittest.TestCase):
         node = ast.BoolConst('')
         as1=ast.PrintVisitor()
         as2=as1.visit_BoolConst(node)
+    def test_AssumeStmt(self):
+        prg1 = "assume x=1"
+        ast1 = ast.parse_string(prg1)
+        prg2 = "assume x=1"
+        ast2 = ast.parse_string(prg2)
+        self.assertEqual(ast1,ast2)
+    def test_Exp(self):
+        operation1 = ['x', ':=', "2"]
+        args1 = [100, 9090]
+        expression1 = ast.Exp(operation1, args1)
+        expression1.is_binary()
+    def test_open_brkt(self):
+        ast_print_Visitor = ast.PrintVisitor()
+        ast_print_Visitor._open_brkt(no_brkt='')
+        ast_print_Visitor._close_brkt(no_brkt='')
+    def test_visit_Exp_is_unary(self):
+        ast1= ast.PrintVisitor()
+        operation1 = ['x', ':=', "2"]
+        node = ast.BoolConst('true')
+        args1 = [node]
+        expression1 = ast.Exp(operation1, args1)
+        ast1.visit_Exp(expression1)
+    def test_visit_StmtList(self):
+        ast_stmtlist=ast.StmtList('')
+        ast1_Printvisitor= ast.PrintVisitor()
+        ast1_Printvisitor.visit_StmtList(ast_stmtlist)
+    def test_visit_AssumeStmt(self):
+        node = ast.BoolConst('true')
+        astassume = ast.AssumeStmt(node)
+        ast1_Printvisitor= ast.PrintVisitor()
+        ast1_Printvisitor.visit_AssumeStmt(astassume)
+    def test_visit_HavocStmt(self):
+        node = ast.BoolConst('true')
+        node2 = ast.BoolConst('true')
+        listofnodes = [node,node2]
+        astassume = ast.HavocStmt(listofnodes)
+        ast1_Printvisitor= ast.PrintVisitor()
+        ast1_Printvisitor.visit_HavocStmt(astassume)
+
+
+
+
 
 
 
