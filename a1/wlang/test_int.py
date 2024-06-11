@@ -44,6 +44,7 @@ class TestInt(unittest.TestCase):
         self.assertEqual(st.env["x"], 10)
         # no other variables in the state
         self.assertEqual(len(st.env), 1)
+    
     def test_Stmt_equal(self):
         prg1 = "x:=10; y:=20"
         ast1 = ast.parse_string(prg1)
@@ -179,6 +180,13 @@ class TestInt(unittest.TestCase):
         interp = int.Interpreter()
         st = int.State()
         st = interp.run(ast1, st)
+        prg2 = 'havoc x:=2'
+        ast2 = ast.parse_string(prg2)
+        interp = int.Interpreter()
+        st = int.State()
+        st = interp.run(ast2, st)
+        self.assertEqual(ast1,ast2)
+        
 
     def test_whileStmt(self):
         prg1 = 'x:=1; while x<=2 do x:=x+1'   
@@ -186,8 +194,70 @@ class TestInt(unittest.TestCase):
         prg2 = 'x:=1; while x<=2 do x:=x+1'   
         ast2 = ast.parse_string(prg2)
         self.assertEqual(ast1,ast2)
+    
+    def test_AssertStmt(self):
+        prg1 = 'x:=1; assert x>2;skip'
+        ast1 = ast.parse_string(prg1)
+        prg2 = 'x:=1; assert x>2;skip'
+        ast2 = ast.parse_string(prg2)
+        self.assertEqual(ast1,ast2)
+    
+    def test_AssumeStmt(self):
+        prg1 = 'assume 1 < 2'
+        ast1 = ast.parse_string(prg1)
+        prg2 = 'assume 1 < 2'
+        ast2 = ast.parse_string(prg2)
+        self.assertEqual(ast1,ast2)
 
+    def test_const(self):
+        ast1=ast.Const(5)
+        print(ast1)
+        ast1.__repr__()
+        ast1.__str__()
+        ast1.__hash__()
+
+    def test_INTVAR(self):
+        ast1=ast.IntVar("x")
+        print(ast1)
+        ast1.__repr__()
+        ast1.__str__()
+        ast1.__hash__()
+    def test_AssumeStmt(self):
+        prg1 = "y:=2; assume (y<3)"
+        ast1 = ast.parse_string(prg1)
+        print(ast1)
+    def test_havocStmt(self):
+        prg1 = "y:=2; havoc y<3"
+        ast1 = ast.parse_string(prg1)
+        print(ast1)
+    
+    def test_ifandwhileStmt(self):
+        prg1 = "x:=1; while x<=2 do x:=x+1; if x<=1 then x:= x+1 else x:=x+2;skip"
+        ast1 = ast.parse_string(prg1)
+        print(ast1)
+    
+    def test_bool(self):
+        node = ast.BoolConst('true')
+        as1=ast.PrintVisitor()
+        as2=as1.visit_BoolConst(node)
+
+    def test_bool2(self):
+        node = ast.BoolConst('')
+        as1=ast.PrintVisitor()
+        as2=as1.visit_BoolConst(node)
+
+
+
+    """
+    def test_Exp(self):
+        ast1=ast.Exp("not")
+    """
+
+   
+
+        
     @patch('sys.argv', ['wlang.int', 'wlang/test1.prg'])
     def test_main(self):
         self.assertEqual(int.main(),0)
+
 

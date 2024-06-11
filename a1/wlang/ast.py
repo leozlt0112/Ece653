@@ -275,6 +275,7 @@ class AstVisitor(object):
     def visit(self, node, *args, **kwargs):
         """Visit a node."""
         """  node.__class__.name __ __reserved, class returns name of class, name returns name of class
+        .class is the type, .name is the name of the class the object belongs to
         """
         method = "visit_" + node.__class__.__name__
         """looks into object and returns any kind of methods and """
