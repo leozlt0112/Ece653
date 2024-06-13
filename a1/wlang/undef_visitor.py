@@ -28,24 +28,36 @@ class UndefVisitor(ast.AstVisitor):
 
     def __init__(self):
         super(UndefVisitor, self).__init__()
+        self._undefined_variables=set()
+        self._defined_variables=set()
         pass
 
     def check(self, node):
         """Check for undefined variables starting from a given AST node"""
         # do the necessary setup/arguments and call self.visit (node, args)
-        pass
+        # self.defined_variables = set()
+        self._defined_variables=set()
+        print("defined\n", self._defined_variables)
+        print("undefined\n", self._undefined_variables)
+        self.visit(node)
+        
 
     def get_undefs(self):
+        return self._undefined_variables()
         """Return the set of all variables that are used before being defined
         in the program.  Available only after a call to check()
         """
-        pass
 
     def visit_StmtList(self, node, *args, **kwargs):
-        pass
+        if node.stmts is None:
+            return 
+        else:
+            for s in node.stmts:
+                self.visit(s)
 
     def visit_IntVar(self, node, *args, **kwargs):
-        pass
+        if node not in self._defined_variables():
+            self._undefined_variables.add(node)
 
     def visit_Const(self, node, *args, **kwargs):
         pass
@@ -54,15 +66,20 @@ class UndefVisitor(ast.AstVisitor):
         pass
 
     def visit_AsgnStmt(self, node, *args, **kwargs):
-        pass
+        self.visit(node.rhs)
+        self.defined_variables.add(node.lhs) 
+        
 
     def visit_Exp(self, node, *args, **kwargs):
-        pass
+        for arg in node.args:
+            self.visit(arg)
 
     def visit_HavocStmt(self, node, *args, **kwargs):
-        pass
+        for var in node.vars:
+            self.defined_variables.add(var)
 
     def visit_AssertStmt(self, node, *args, **kwargs):
+        
         pass
 
     def visit_AssumeStmt(self, node, *args, **kwargs):

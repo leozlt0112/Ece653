@@ -81,10 +81,9 @@ class StatsVisitor(ast.AstVisitor):
         self.visit_Stmt(self,node)
         self.visit(node.cond)
 
-
     def visit_HavocStmt(self, node, *args, **kwargs):
         self.visit_Stmt(self,node)
-        for var in node.var_list:
+        for var in node.vars:
             self.visit(var)
     def visit_Exp(self, node, *args, **kwargs):
         for var in node.args:
