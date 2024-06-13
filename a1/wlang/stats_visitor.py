@@ -42,37 +42,54 @@ class StatsVisitor(ast.AstVisitor):
         return len(self._vars)
 
     def visit_StmtList(self, node, *args, **kwargs):
-        pass
+        if node.stmts is None:
+            return 
+        else:
+            for s in node.stmts:
+                self.visit(s)
 
     def visit_Stmt(self, node, *args, **kwargs):
-        pass
+        self._num_stmts += 1
 
     def visit_IntVar(self, node, *args, **kwargs):
-        pass
+        self._vars.add(node.name)
 
     def visit_Const(self, node, *args, **kwargs):
         pass
 
     def visit_AsgnStmt(self, node, *args, **kwargs):
-        pass
+        self._num_stmts += 1
+        self.visit(node.lhs)
+        self.visit(node.rhs)
 
     def visit_IfStmt(self, node, *args, **kwargs):
-        pass
+        self.visit_Stmt(self,node)
+        self.visit(node.then_stmt)
+        if node.has_else():
+            self.visit(node.else_stmt)
+    
 
     def visit_WhileStmt(self, node, *args, **kwargs):
-        pass
+        self.visit_Stmt(self,node)
+        self.visit(node.body)
+                
 
     def visit_AssertStmt(self, node, *args, **kwargs):
-        pass
-
+        self.visit_Stmt(self,node)
+        self.visit(node.cond)
     def visit_AssumeStmt(self, node, *args, **kwargs):
-        pass
+        self.visit_Stmt(self,node)
+        self.visit(node.cond)
+
 
     def visit_HavocStmt(self, node, *args, **kwargs):
-        pass
-
+        self.visit_Stmt(self,node)
+        for var in node.var_list:
+            self.visit(var)
     def visit_Exp(self, node, *args, **kwargs):
-        pass
+        for var in node.args:
+            self.visit(var)
+
 
 
 def main():

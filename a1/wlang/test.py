@@ -23,7 +23,7 @@
 import unittest
 
 if __name__ == "__main__":
-    test_names = ["test_int", "test_stats_visitor", "test_undef_visitor"]
+    test_names = ["test_int", "test_stats_visitor", "test_undef_visitor","test_live"]
     suite = unittest.defaultTestLoader.loadTestsFromNames(
         ["wlang." + t for t in test_names]
     )

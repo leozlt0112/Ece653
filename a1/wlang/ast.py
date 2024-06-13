@@ -185,7 +185,7 @@ class BExp(Exp):
 
 class RelExp(BExp):
     """A relational comparison expression"""
-
+    """compare two integers """
     def __init__(self, lhs, op, rhs):
         super(RelExp, self).__init__(op, [lhs, rhs])
 
@@ -232,7 +232,7 @@ class BoolConst(Const):
 
 class IntVar(Ast):
     """An integer variable"""
-
+    """x"""
     def __init__(self, name):
         self.name = name
 

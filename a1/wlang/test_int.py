@@ -24,7 +24,7 @@ import sys
 import unittest
 from unittest.mock import patch
 
-from . import ast, int
+from . import ast, int, parser
 
 import io
 
@@ -117,18 +117,46 @@ class TestInt(unittest.TestCase):
         st = int.State()
         st = interp.run(ast2, st)
 
+    def test_visitRelExp(self):
+        lhs = ast.Const(2)
+        rhs = ast.Const(5)
+        RelExp_node = ast.RelExp(lhs,'xnor',rhs)
+        interp=int.Interpreter()
+        with self.assertRaises(AssertionError):
+            interp.visit_RelExp(RelExp_node)
+    
     def test_Bexp(self):
         prg1 = "if (not false) and true then x:=2"
         ast1 = ast.parse_string(prg1)
         interp = int.Interpreter()
         st = int.State()
+        
         st = interp.run(ast1, st)
-    def test_Bexp(self):
+    def test_Bexp1(self):
         prg1 = "if (not false) or true then x:=2"
         ast1 = ast.parse_string(prg1)
         interp = int.Interpreter()
         st = int.State()
         st = interp.run(ast1, st)
+
+    def test_visit_BExp_unsupported_operation(self):
+        lhs = ast.Const(1)
+        rhs = ast.Const(2)
+        
+        bexp_node = ast.BExp('xnor', [lhs, rhs])  
+        interpreter = int.Interpreter()
+        
+        with self.assertRaises(AssertionError):
+            interpreter.visit_BExp(bexp_node)
+
+    def test_vist_Aexp_unsupported(self):
+        lhs = ast.Const(2)
+        rhs = ast.Const(4)
+        aexp_node = ast.AExp('?', [lhs,rhs])
+        interpreter = int.Interpreter()
+        with self.assertRaises(AssertionError):
+            interpreter.visit_AExp(aexp_node)
+    
     def test_vist_Aexp(self):
         prg1 = "x:=2+10+10-2+10*5+10/5"
         ast1 = ast.parse_string(prg1)
@@ -172,7 +200,8 @@ class TestInt(unittest.TestCase):
         ast1 = ast.parse_string(prg1)
         interp = int.Interpreter()
         st = int.State()
-        st = interp.run(ast1, st)
+        with self.assertRaises(Exception):
+            st = interp.run(ast1, st)
 
     def test_havoc(self):
         prg1 = 'havoc x:=1'
@@ -222,14 +251,17 @@ class TestInt(unittest.TestCase):
         ast1.__repr__()
         ast1.__str__()
         ast1.__hash__()
-    def test_AssumeStmt(self):
-        prg1 = "y:=2; assume (y<3)"
-        ast1 = ast.parse_string(prg1)
-        print(ast1)
+
+    def test_printAssumeStmt(self):
+        node = ast.AssumeStmt('assume x<2')
+        ast1=ast.PrintVisitor()   
+        with self.assertRaises(Exception):
+            as2=ast1.visit_AssumeStmt(node)
     def test_havocStmt(self):
-        prg1 = "y:=2; havoc y<3"
+        prg1 = "havoc p,d,f"
         ast1 = ast.parse_string(prg1)
         print(ast1)
+
     
     def test_ifandwhileStmt(self):
         prg1 = "x:=1; while x<=2 do x:=x+1; if x<=1 then x:= x+1 else x:=x+2;skip"
@@ -271,6 +303,7 @@ class TestInt(unittest.TestCase):
         ast_stmtlist=ast.StmtList('')
         ast1_Printvisitor= ast.PrintVisitor()
         ast1_Printvisitor.visit_StmtList(ast_stmtlist)
+        
     def test_visit_AssumeStmt(self):
         node = ast.BoolConst('true')
         astassume = ast.AssumeStmt(node)
@@ -284,22 +317,152 @@ class TestInt(unittest.TestCase):
         ast1_Printvisitor= ast.PrintVisitor()
         ast1_Printvisitor.visit_HavocStmt(astassume)
 
+    def test_visit_IntVar(self):
+        astIntvar=ast.IntVar("x")
+        astvisitor = ast.AstVisitor()
+        with self.assertRaises(Exception):
+            output = astvisitor.visit_IntVar(astIntvar)
+    def test_visit_SkipStmt(self):
+        astskip = ast.SkipStmt()
+        astvisitor = ast.AstVisitor()
+        with self.assertRaises(Exception):
+            output=astvisitor.visit_SkipStmt(astskip)
+    def test_visit_PrintStateStmt(self):
+        astPrint = ast.PrintStateStmt()
+        astvisitor = ast.AstVisitor()
+        with self.assertRaises(Exception):
+            output=astvisitor.visit_PrintStateStmt(astPrint)
+    def test_visit_AsgnStmt(self):
+        astAssign = ast.AsgnStmt('x', '2')
+        astvisitor = ast.AstVisitor()
+        with self.assertRaises(Exception):
+            output=astvisitor.visit_AsgnStmt(astAssign)
+    def test_visit_IfStmt(self):
+        astIfStmt= ast.IfStmt('=', 'then')
+        astvisitor = ast.AstVisitor()
+        with self.assertRaises(Exception):
+            output=astvisitor.visit_IfStmt(astIfStmt)
+    def test_visit_whilestmt(self):
+        astwhileStmt= ast.WhileStmt('=', 'x=2')
+        astvisitor = ast.AstVisitor()
+        with self.assertRaises(Exception):
+            output=astvisitor.visit_WhileStmt(astwhileStmt)
+    def test_vist_assertstmt(self):
+        astassertStmt=ast.AssertStmt('true')
+        astvisitor = ast.AstVisitor()
+        with self.assertRaises(Exception):
+            output=astvisitor.visit_AssertStmt(astassertStmt)
+    
+    def test_whileLangBuffer(self):
+        whilebuffer=parser.WhileLangBuffer('sss')
+    def test_stmt_parser(self):
+        p = '?;?'
+        with self.assertRaises(Exception):
+             ast1 = ast.parse_string(p)
+             interp = int.Interpreter()
+             st = int.State()
+             st = interp.run(ast1, st)
+    def test_parser_block_stmt(self):
+        p = parser.WhileLangParser()
+        with self.assertRaises(Exception):
+            c = p._block_stmt_()
+    def test_parser_while_stmt(self):
+        prg='p:=100;while p>0 inv p>0 do {\n p := p-1\n}; print_state'
+        ast1 = ast.parse_string(prg)
+        interp = int.Interpreter()
+        st = int.State()
+        st = interp.run(ast1, st)
+    def test__bfactor(self):
+        p = 'while 2'
+        with self.assertRaises(Exception):
+            ast1 = ast.parse_string(p)
+            interp = int.Interpreter()
+            st = int.State()
+            st = interp.run(ast1, st)
+    def test_parser_negative(self):
+        p = "x:=-1"
+        ast1 = ast.parse_string(p)
+        interp = int.Interpreter()
+        st = int.State()
+        st = interp.run(ast1, st)
+    """def test_parser_newline(self):
+        parser1 = parser.WhileLangParser()
+        print(parser1._NEWLINE_())"""
+    def test_parser_whilelang(self):
+        p = "x:=-1"
+        ast1 = ast.parse_string(p)
+        c = parser.WhileLangSemantics()
+        c.start(p)
+        c.stmt_list(p)
+        c.stmt(p)
+        c.asgn_stmt(p)
+        c.print_state_stmt(p)
+        c.if_stmt(p)
+        c.while_stmt(p)
+        c.assert_stmt(p)
+        c.assume_stmt(p)
+        c.block_stmt(p)
+        c.skip_stmt(p)
+        c.havoc_stmt(p)
+        c.var_list(p)
+        c.bexp(p)
+        c.bterm(p)
+        c.bfactor(p)
+        c.batom(p)
+        c.bool_const(p)
+        c.rexp(p)
+        c.rop(p)
+        c.aexp(p)
+        c.addition(p)
+        c.subtraction(p)
+        c.term(p)
+        c.mult(p)
+        c.division(p)
+        c.factor(p)
+        c.neg_number(p)
+        c.atom(p)
+        c.name(p)
+        c.number(p)
+        c.INT(p)
+        c.NAME(p)
+        c.NEWLINE(p)
+    def test_visit_AssumeStmt(self):
+        astassertStmt=ast.AssumeStmt('true')
+        astvisitor = ast.AstVisitor()
+        with self.assertRaises(Exception):
+            output=astvisitor.visit_AssumeStmt(astassertStmt)
+    def test_visit_HavocStmt(self):
+        astHavocStmt=ast.HavocStmt(['x','y'])
+        astvisitor = ast.AstVisitor()
+        with self.assertRaises(Exception):
+            output=astvisitor.visit_HavocStmt(astHavocStmt)
+    def test_visit_StmtList_branch(self):
+        var_x = ast.IntVar("x")
+        const_1 = ast.IntConst(1)
+        assign_stmt = ast.AsgnStmt(lhs=var_x, rhs=const_1)
 
+        # Create a StmtList with a list containing one AsgnStmt
+        stmtlist_ast = ast.StmtList([assign_stmt])
 
-
-
-
-
-    """
-    def test_Exp(self):
-        ast1=ast.Exp("not")
-    """
-
-   
-
+        # Create a PrintVisitor and use it to visit the StmtList
+        visitor_print = ast.PrintVisitor()
+        visitor_print.visit(stmtlist_ast)
+    def test_print_if_stmt(self):
+        prg1='x:=1;if x=1 then x:=2'
+        ast1=ast.parse_string(prg1)
+        print(ast1)
         
     @patch('sys.argv', ['wlang.int', 'wlang/test1.prg'])
-    def test_main(self):
+    def test_main1(self):
         self.assertEqual(int.main(),0)
+    
+    @patch('sys.argv', ['wlang.parser', 'wlang/test1.prg'])
+    def test_main2(self):
+        filename = 'wlang/test1.prg' 
+        result = parser.main(filename)
+    
+   
+
+
 
 

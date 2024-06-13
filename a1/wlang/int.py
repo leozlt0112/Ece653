@@ -28,6 +28,7 @@ from . import ast
 
 
 class State(object):
+    """assignment of values to each variable"""
     def __init__(self):
         self.env = dict()
 
