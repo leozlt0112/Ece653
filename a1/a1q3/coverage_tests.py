@@ -15,7 +15,6 @@ class CoverageTests(unittest.TestCase):
         self.assertEqual(output, ["","b","b"])
         # YOUR CODE HERE
 
-        pass
 
     def test_2(self):
         """Edge Coverage but not Edge Pair Coverage"""
@@ -32,7 +31,6 @@ class CoverageTests(unittest.TestCase):
 
         # YOUR CODE HERE
 
-        pass
 
     def test_3(self):
         """Edge Pair Coverage but not Prime Path Coverage"""
@@ -57,4 +55,3 @@ class CoverageTests(unittest.TestCase):
         output6 = token_with_escape(input6)
         self.assertEqual(output6, ["","",""])
 
-        pass

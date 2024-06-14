@@ -451,7 +451,12 @@ class TestInt(unittest.TestCase):
         prg1='x:=1;if x=1 then x:=2'
         ast1=ast.parse_string(prg1)
         print(ast1)
-        
+
+    def test_whileLangParsernewline(self):
+        parserobject=parser.WhileLangParser()
+        with self.assertRaises(Exception):
+            output=parserobject._NEWLINE_()
+
     @patch('sys.argv', ['wlang.int', 'wlang/test1.prg'])
     def test_main1(self):
         self.assertEqual(int.main(),0)
@@ -460,7 +465,7 @@ class TestInt(unittest.TestCase):
     def test_main2(self):
         filename = 'wlang/test1.prg' 
         result = parser.main(filename)
-    
+
    
 
 
