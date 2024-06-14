@@ -284,20 +284,21 @@ class TestInt(unittest.TestCase):
         ast2 = ast.parse_string(prg2)
         self.assertEqual(ast1,ast2)
     def test_Exp(self):
-        operation1 = ['x', ':=', "2"]
-        args1 = [100, 9090]
+        operation1 = '+'
+        args1 = [ast.IntVar('x'), ast.Const(2)]
         expression1 = ast.Exp(operation1, args1)
-        expression1.is_binary()
+        self.assertEqual(expression1.is_binary(),1==1)
     def test_open_brkt(self):
         ast_print_Visitor = ast.PrintVisitor()
         ast_print_Visitor._open_brkt(no_brkt='')
         ast_print_Visitor._close_brkt(no_brkt='')
     def test_visit_Exp_is_unary(self):
         ast1= ast.PrintVisitor()
-        operation1 = ['x', ':=', "2"]
+        operation1 = ['Not']
         node = ast.BoolConst('true')
         args1 = [node]
         expression1 = ast.Exp(operation1, args1)
+        self.assertTrue(expression1.is_unary())
         ast1.visit_Exp(expression1)
     def test_visit_StmtList(self):
         ast_stmtlist=ast.StmtList('')
@@ -309,6 +310,7 @@ class TestInt(unittest.TestCase):
         astassume = ast.AssumeStmt(node)
         ast1_Printvisitor= ast.PrintVisitor()
         ast1_Printvisitor.visit_AssumeStmt(astassume)
+    """   
     def test_visit_HavocStmt(self):
         node = ast.BoolConst('true')
         node2 = ast.BoolConst('true')
@@ -316,7 +318,7 @@ class TestInt(unittest.TestCase):
         astassume = ast.HavocStmt(listofnodes)
         ast1_Printvisitor= ast.PrintVisitor()
         ast1_Printvisitor.visit_HavocStmt(astassume)
-
+    """
     def test_visit_IntVar(self):
         astIntvar=ast.IntVar("x")
         astvisitor = ast.AstVisitor()
@@ -333,22 +335,26 @@ class TestInt(unittest.TestCase):
         with self.assertRaises(Exception):
             output=astvisitor.visit_PrintStateStmt(astPrint)
     def test_visit_AsgnStmt(self):
-        astAssign = ast.AsgnStmt('x', '2')
+        astAssign = ast.AsgnStmt(ast.IntVar('x'), ast.IntConst(2))
         astvisitor = ast.AstVisitor()
         with self.assertRaises(Exception):
             output=astvisitor.visit_AsgnStmt(astAssign)
     def test_visit_IfStmt(self):
-        astIfStmt= ast.IfStmt('=', 'then')
-        astvisitor = ast.AstVisitor()
+        astIfStmt = ast.IfStmt(
+            ast.RelExp(ast.IntVar('x'), '<', ast.IntConst(2)), 
+            ast.AsgnStmt(ast.IntVar('x'), ast.IntConst(2)),
+            ast.AsgnStmt(ast.IntVar('x'), ast.IntConst(1))
+        )
+        astvisitor=ast.AstVisitor()
         with self.assertRaises(Exception):
-            output=astvisitor.visit_IfStmt(astIfStmt)
+            output=astvisitor.visit(astIfStmt)
     def test_visit_whilestmt(self):
-        astwhileStmt= ast.WhileStmt('=', 'x=2')
+        astwhileStmt= ast.WhileStmt(ast.RelExp(ast.IntVar('x'), '<', ast.IntConst(2)), ast.AsgnStmt(ast.IntVar('x'), ast.IntConst(2)))
         astvisitor = ast.AstVisitor()
         with self.assertRaises(Exception):
             output=astvisitor.visit_WhileStmt(astwhileStmt)
     def test_vist_assertstmt(self):
-        astassertStmt=ast.AssertStmt('true')
+        astassertStmt=ast.AssertStmt( ast.RelExp(ast.IntVar('x'), '<', ast.IntConst(2)))
         astvisitor = ast.AstVisitor()
         with self.assertRaises(Exception):
             output=astvisitor.visit_AssertStmt(astassertStmt)
@@ -431,8 +437,8 @@ class TestInt(unittest.TestCase):
         astvisitor = ast.AstVisitor()
         with self.assertRaises(Exception):
             output=astvisitor.visit_AssumeStmt(astassertStmt)
-    def test_visit_HavocStmt(self):
-        astHavocStmt=ast.HavocStmt(['x','y'])
+    def test_visit_HavocStmt_1(self):
+        astHavocStmt=ast.HavocStmt(['havoic','x','<','2'])
         astvisitor = ast.AstVisitor()
         with self.assertRaises(Exception):
             output=astvisitor.visit_HavocStmt(astHavocStmt)
