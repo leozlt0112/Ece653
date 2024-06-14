@@ -29,6 +29,12 @@ class TestStatsVisitor(unittest.TestCase):
         ast5 = ast.parse_string(prg5)
         sv5 = stats_visitor.StatsVisitor()
         sv5.visit(ast5)
+
+        prg6= "x:=4;if x<2 then x:=2; havoc x=1"
+        ast6 = ast.parse_string(prg6)
+        sv6 = stats_visitor.StatsVisitor()
+        sv6.visit(ast6)
+
         aststmtlist=ast.StmtList(None)
         statsvisit=stats_visitor.StatsVisitor()
         statsvisit.visit_StmtList(aststmtlist)
@@ -42,6 +48,9 @@ class TestStatsVisitor(unittest.TestCase):
         self.assertEqual(sv4.get_num_vars(),1)
         self.assertEqual(sv5.get_num_vars(),1)
         self.assertEqual(sv5.get_num_stmts(),4)
+        self.assertEqual(sv6.get_num_stmts(),4)
+        self.assertEqual(sv6.get_num_vars(),1)
+
 
         # UNCOMMENT to run the test
     @patch('sys.argv', ['wlang.stats_visitor', 'wlang/test1.prg'])
