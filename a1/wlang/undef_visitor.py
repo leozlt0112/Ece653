@@ -103,6 +103,4 @@ class UndefVisitor(ast.AstVisitor):
         self._defined_variables = defined_variables_before_then.union(to_be_added)
 
     def visit_WhileStmt(self, node, *args, **kwargs):
-        if(node.cond==ast.BoolConst('true')):
-            self.visit(node.body)
-
+        pass

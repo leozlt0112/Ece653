@@ -15,7 +15,7 @@ class CoverageTests(unittest.TestCase):
         self.assertEqual(output, ["","b","b"])
         # YOUR CODE HERE
 
-
+    
     def test_2(self):
         """Edge Coverage but not Edge Pair Coverage"""
         input = "|^b|b"

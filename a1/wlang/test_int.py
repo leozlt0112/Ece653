@@ -367,7 +367,7 @@ class TestInt(unittest.TestCase):
         with self.assertRaises(Exception):
             c = p._block_stmt_()
     def test_parser_while_stmt(self):
-        prg='p:=100;while p>0 inv p>0 do {\n p := p-1\n}; print_state'
+        prg='p:=100;while p>0 do {\n p := p-1\n}; print_state'
         ast1 = ast.parse_string(prg)
         interp = int.Interpreter()
         st = int.State()
