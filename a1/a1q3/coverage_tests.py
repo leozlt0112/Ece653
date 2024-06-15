@@ -20,12 +20,12 @@ class CoverageTests(unittest.TestCase):
     """edge covered in the below function 
     [8,10] [8,13] [10,11] [10,13] [11,13] 
     [13,14] [14,26] [14, 15] [15,16] 
-    [15,23] [23,14] [23,24] [16,17] [16,18]
+    [15,23] [24,14] [23,24] [16,17] [16,18]
       [17,14] [18,19] [18,21] [19,24] 
       [21,14]"""
-    """edge 24,14 is not covered because the state alternates
+    """edge [23,14] is not covered because the state alternates
     between 0 and 1, there does not exist a case where state is neither 0 or 1 
-    when evaluate to line 24, state is either 1 or 0"""
+    when evaluate to line 23, state is either 1 or 0"""
     def test_2(self):
         input = "|^b|b"
         output1 = token_with_escape(input)

@@ -91,13 +91,10 @@ class UndefVisitor(ast.AstVisitor):
             self.visit(node.else_stmt)
             if (self._defined_variables == (defined_variables_after_then.union(defined_variables_before_then))):
                 after_else = self._defined_variables - defined_variables_before_then
-                #print(after_else)
             else: 
                 after_else = self._defined_variables-(defined_variables_after_then.union(defined_variables_before_then))
 
-            # Merge defined variables from both branches
             to_be_added = defined_variables_after_then.intersection(after_else)
-            #print(to_be_added)
             """z ^ y"""
 
         self._defined_variables = defined_variables_before_then.union(to_be_added)

@@ -158,7 +158,7 @@ class TestInt(unittest.TestCase):
             interpreter.visit_AExp(aexp_node)
     
     def test_vist_Aexp(self):
-        prg1 = "x:=2+10+10-2+10*5+10/5"
+        prg1 = "x:=8+9+21-2+53*5+89/5"
         ast1 = ast.parse_string(prg1)
         interp = int.Interpreter()
         st = int.State()
@@ -232,9 +232,9 @@ class TestInt(unittest.TestCase):
         self.assertEqual(ast1,ast2)
     
     def test_AssumeStmt(self):
-        prg1 = 'assume 1 < 2'
+        prg1 = 'assume x < 4'
         ast1 = ast.parse_string(prg1)
-        prg2 = 'assume 1 < 2'
+        prg2 = 'assume x < 4'
         ast2 = ast.parse_string(prg2)
         self.assertEqual(ast1,ast2)
 
@@ -310,15 +310,6 @@ class TestInt(unittest.TestCase):
         astassume = ast.AssumeStmt(node)
         ast1_Printvisitor= ast.PrintVisitor()
         ast1_Printvisitor.visit_AssumeStmt(astassume)
-    """   
-    def test_visit_HavocStmt(self):
-        node = ast.BoolConst('true')
-        node2 = ast.BoolConst('true')
-        listofnodes = [node,node2]
-        astassume = ast.HavocStmt(listofnodes)
-        ast1_Printvisitor= ast.PrintVisitor()
-        ast1_Printvisitor.visit_HavocStmt(astassume)
-    """
     def test_visit_IntVar(self):
         astIntvar=ast.IntVar("x")
         astvisitor = ast.AstVisitor()
@@ -447,10 +438,8 @@ class TestInt(unittest.TestCase):
         const_1 = ast.IntConst(1)
         assign_stmt = ast.AsgnStmt(lhs=var_x, rhs=const_1)
 
-        # Create a StmtList with a list containing one AsgnStmt
         stmtlist_ast = ast.StmtList([assign_stmt])
 
-        # Create a PrintVisitor and use it to visit the StmtList
         visitor_print = ast.PrintVisitor()
         visitor_print.visit(stmtlist_ast)
     def test_print_if_stmt(self):
