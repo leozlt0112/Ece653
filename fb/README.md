@@ -200,7 +200,6 @@ git clone https://git.uwaterloo.ca/stqam-1245/class/USER.git stqam
 cd stqam/fb
 # checkout our version of chocolate-doom
 git clone https://git.uwaterloo.ca/stqam-1245/chocolate-doom.git
-cd chocolate-doom
 mkdir build ; cd build
 cmake -DCMAKE_C_COMPILER=clang -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
       -DCMAKE_C_FLAGS='-fsanitize=fuzzer-no-link,address -fprofile-instr-generate -fcoverage-mapping -g -ggdb3 -O2' \
