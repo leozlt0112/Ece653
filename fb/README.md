@@ -200,8 +200,9 @@ git clone https://git.uwaterloo.ca/stqam-1245/class/USER.git stqam
 cd stqam/fb
 # checkout our version of chocolate-doom
 git clone https://git.uwaterloo.ca/stqam-1245/chocolate-doom.git
+cd chocolate-doom
 mkdir build ; cd build
-cmake -DCMAKE_C_COMPILER=clang-10 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+cmake -DCMAKE_C_COMPILER=clang -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
       -DCMAKE_C_FLAGS='-fsanitize=fuzzer-no-link,address -fprofile-instr-generate -fcoverage-mapping -g -ggdb3 -O2' \
       ../ -GNinja
 ninja
@@ -212,11 +213,14 @@ You can use `make` instead if you prefer. `CMAKE_C_FLAGS` has the options to
 enabled fuzzing, AddressSanitizer, and coverage. You should not need to change
 them. However, you may want to try enabling additional sanitizers, or disable
 AddressSanitizer.
+
+If you get any errors from `cmake` or `ninja`/`make`, ensure that you install
+required dependencies.
  
 We are using our own version of Chocolate Doom that has been improved for
 fuzzing. To see what we have changed, look at the commit [history].
 
-[history]: https://git.uwaterloo.ca/stqam-1239/chocolate-doom/-/commits/fuzz/
+[history]: https://git.uwaterloo.ca/stqam-1245/chocolate-doom/-/commits/fuzz/
 
 To run the fuzz target, in the `build` directory, run
 ```bash
