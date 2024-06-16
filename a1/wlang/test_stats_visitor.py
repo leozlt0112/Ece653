@@ -34,7 +34,7 @@ class TestStatsVisitor(unittest.TestCase):
         ast6 = ast.parse_string(prg6)
         sv6 = stats_visitor.StatsVisitor()
         sv6.visit(ast6)
-
+        """s"""
         aststmtlist=ast.StmtList(None)
         statsvisit=stats_visitor.StatsVisitor()
         statsvisit.visit_StmtList(aststmtlist)
