@@ -29,10 +29,35 @@ class PuzzleTests (unittest.TestCase):
         self.assertEquals(sum([res[i][3 - i - 1] for i in range(3)]), 15)
 
     def test_2(self):
-        pass
+        res = solve_magic_square(4, 1, 1, 5)
+        self.assertEqual(sum([res[0][j] for j in range(4)]), 34)
+        self.assertEqual(sum([res[1][j] for j in range(4)]), 34)
+        self.assertEqual(sum([res[2][j] for j in range(4)]), 34)
+        self.assertEqual(sum([res[3][j] for j in range(4)]), 34)
+        self.assertEqual(sum([res[i][0] for i in range(4)]), 34)
+        self.assertEqual(sum([res[i][1] for i in range(4)]), 34)
+        self.assertEqual(sum([res[i][2] for i in range(4)]), 34)
+        self.assertEqual(sum([res[i][3] for i in range(4)]), 34)
+        self.assertEqual(sum([res[i][i] for i in range(4)]), 34)
+        self.assertEqual(sum([res[i][4 - i - 1] for i in range(4)]), 34)
+
 
     def test_3(self):
-        pass
+        res = solve_magic_square(5, 2, 2, 20)
+        self.assertEqual(sum([res[0][j] for j in range(5)]), 65)
+        self.assertEqual(sum([res[1][j] for j in range(5)]), 65)
+        self.assertEqual(sum([res[2][j] for j in range(5)]), 65)
+        self.assertEqual(sum([res[3][j] for j in range(5)]), 65)
+        self.assertEqual(sum([res[4][j] for j in range(5)]), 65)
+        self.assertEqual(sum([res[i][0] for i in range(5)]), 65)
+        self.assertEqual(sum([res[i][1] for i in range(5)]), 65)
+        self.assertEqual(sum([res[i][2] for i in range(5)]), 65)
+        self.assertEqual(sum([res[i][3] for i in range(5)]), 65)
+        self.assertEqual(sum([res[i][4] for i in range(5)]), 65)
+        self.assertEqual(sum([res[i][i] for i in range(5)]), 65)
+        self.assertEqual(sum([res[i][5 - i - 1] for i in range(5)]), 65)
 
     def test_4(self):
+        res = solve_magic_square(2, 1, 1, 1)
+        self.assertEquals(res, None)
         pass
