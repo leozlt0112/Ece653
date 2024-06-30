@@ -27,9 +27,10 @@ from . import ast, sym
 
 class TestSym (unittest.TestCase):
     def test_one(self):
-        prg1 = "havoc x; assume x > 10; assert x > 15"
+        prg1 = "havoc x, y; while x > 0 do {while y > x do {y := y / 2 - 1}; x := x / 2 - 1}"
         ast1 = ast.parse_string(prg1)
         engine = sym.SymExec()
         st = sym.SymState()
         out = [s for s in engine.run(ast1, st)]
-        self.assertEquals(len(out), 1)
+        print(len(out))
+        self.assertEqual(len(out), 726)

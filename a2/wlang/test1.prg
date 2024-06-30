@@ -1,2 +1,2 @@
-x := 10;
-print_state
+havoc x;
+while x > 10 do x:=x+1
