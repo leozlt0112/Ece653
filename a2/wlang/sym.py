@@ -176,12 +176,12 @@ class SymExec(ast.AstVisitor):
         return reduce(fn, kids)
 
     def visit_SkipStmt(self, node, *args, **kwargs):
-        return kwargs["state"]
+        return [kwargs["state"]]
 
 
     def visit_PrintStateStmt(self, node, *args, **kwargs):
         print(kwargs["state"])
-        return kwargs["state"]
+        return [kwargs["state"]]
 
     def visit_AsgnStmt(self, node, *args, **kwargs):
         #rhs_to_be_assigned = self.visit(node.rhs, *args, **kwargs)
@@ -189,7 +189,7 @@ class SymExec(ast.AstVisitor):
         state = kwargs['state']
         rhs_to_be_assigned = self.visit(node.rhs, state=state)
         state.env[variable] = rhs_to_be_assigned
-        return state
+        return [state]
 
     def visit_IfStmt(self, node, *args, **kwargs):
         state = kwargs['state']
@@ -200,64 +200,52 @@ class SymExec(ast.AstVisitor):
         if not failed_state.is_empty():
             if node.has_else():
                 else_states=self.visit(node.else_stmt, state=failed_state)
-                if (not isinstance(else_states, list)):
-                    else_states = [else_states]
+                #if (not isinstance(else_states, list)):
+                 #   else_states = [else_states]
                 new_states.extend(else_states)
-                print("we are at failed")
-                print(new_states)
             else:
-                if (not isinstance(failed_state, list)):
-                    failed_state = [failed_state]
+                #if (not isinstance(failed_state, list)):
+                failed_state = [failed_state]
                 new_states.extend(failed_state)
         passed_state.add_pc(cond)
         if not passed_state.is_empty():
             then_states=self.visit(node.then_stmt,state=passed_state)
-            if (not isinstance(then_states, list)):
-                    then_states = [then_states]
+           # if (not isinstance(then_states, list)):
+            #        then_states = [then_states]
             new_states.extend(then_states)
-            print("we are at passed")
-            print(new_states)
         return new_states
-
 
     def visit_WhileStmt(self, node, *args, **kwargs):
         state = kwargs['state']
         new_states = []
         counter = kwargs.get('counter',0)
         if counter == 10:
-            if (not isinstance(state, list)):
-                state = [state]
-            return state 
+            cond = self.visit(node.cond, state=state)
+            new_failed_state = []
+            passed_state,failed_state = state.fork()
+            failed_state.add_pc(z3.Not(cond))
+            new_failed_state = [failed_state]
+            return new_failed_state
         cond = self.visit(node.cond, state=state)
         passed_state,failed_state = state.fork()
         failed_state.add_pc(z3.Not(cond))
         if not failed_state.is_empty():
-            if (not isinstance(failed_state, list)):
-                failed_state = [failed_state]
+            #if (not isinstance(failed_state, list)):
+            failed_state = [failed_state]
             new_states.extend(failed_state)
         passed_state.add_pc(cond)
-        if not passed_state.is_empty():
-            # before if not passed_state.is_empty() and counter < 10
-            #print("entered pass")
+        if not passed_state.is_empty() and counter < 10:
             st = self.visit(node.body, state=passed_state)
-            if (not isinstance(st, list)):
-                st = [st]
-            #print(st)
+          #  if (not isinstance(st, list)):
+           #     st = [st]
             for state in st:
-                if not state.is_empty():
-                    #print("state in st is ",state)
-                    new_state_from_body=self.visit(node, state=state, counter=counter+1)
-                    #print("new state after visiting ",new_state_from_body)
-                    if (not isinstance(new_state_from_body, list)):
-                        new_state_from_body = [new_state_from_body]
-                    new_states.extend(new_state_from_body)
-                    #print(new_states)
+                #if not state.is_empty():
+                new_state_from_body=self.visit(node, state=state, counter=counter+1)
+                   # if (not isinstance(new_state_from_body, list)):
+                    #    new_state_from_body = [new_state_from_body]
+                new_states.extend(new_state_from_body)
         return new_states
-                
-
-
-
-
+    
     def visit_AssertStmt(self, node, *args, **kwargs):
         # Don't forget to print an error message if an assertion might be violated
         state = kwargs['state']
@@ -287,25 +275,19 @@ class SymExec(ast.AstVisitor):
         st = kwargs["state"]
         for v in node.vars:
              st.env[v.name] = z3.Int(v.name)
-        return st
+        return [st]
 
         
 
     def visit_StmtList(self, node, *args, **kwargs):
-        """x:=1;
-            if x>2 then x:=4 else x:=5"""
-        if (not isinstance(kwargs['state'], list)):
-            current_states = [kwargs['state']]
-        else:
-            current_states = kwargs['state']
         current_states = [kwargs['state']]
         for stmt in node.stmts:
             """ every statemnt should give a new state"""
             processed_states = []
             for state in current_states:
                 states = self.visit(stmt, state=state)
-                if (not isinstance(states, list)):
-                    states = [states]
+                if (not isinstance(states, list)): 
+                    states = [states] 
                 processed_states.extend(states)
             current_states = processed_states
         return current_states
