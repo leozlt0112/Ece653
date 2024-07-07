@@ -93,7 +93,7 @@ void PrintDehackedBanners();
 #define FREEDOM_WAD "freedom.wad"
 #endif
 
-char *iwadfile;
+char *fuzziwadfile;
 //
 // D_DoomMain
 //
@@ -170,12 +170,12 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
   I_AtExit(M_SaveDefaults, false);
 
   // Find main IWAD file and load it.
-  iwadfile = D_FindIWAD(IWAD_MASK_DOOM, &gamemission);
+  fuzziwadfile = D_FindIWAD(IWAD_MASK_DOOM, &gamemission);
 
   modifiedgame = false;
 
   DEH_printf("W_Init: Init WADfiles.\n");
-  D_AddFile(iwadfile);
+  D_AddFile(fuzziwadfile);
   numiwadlumps = numlumps;
   W_CheckCorrectIWAD(doom);
 

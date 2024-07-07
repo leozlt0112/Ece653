@@ -212,11 +212,14 @@ You can use `make` instead if you prefer. `CMAKE_C_FLAGS` has the options to
 enabled fuzzing, AddressSanitizer, and coverage. You should not need to change
 them. However, you may want to try enabling additional sanitizers, or disable
 AddressSanitizer.
+
+If you get any errors from `cmake` or `ninja`/`make`, ensure that you install
+required dependencies.
  
 We are using our own version of Chocolate Doom that has been improved for
 fuzzing. To see what we have changed, look at the commit [history].
 
-[history]: https://git.uwaterloo.ca/stqam-1239/chocolate-doom/-/commits/fuzz/
+[history]: https://git.uwaterloo.ca/stqam-1245/chocolate-doom/-/commits/fuzz/
 
 To run the fuzz target, in the `build` directory, run
 ```bash
