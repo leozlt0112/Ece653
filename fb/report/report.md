@@ -40,7 +40,7 @@ line 223 to 236 char *filename2 = "~fuzz.wad";
   }
 The above code increase coverage for chocolate-doom/src/w_wad.c
 
-
+I ran with command  ./src/doom_fuzz -runs=10 ../new_corpus -jobs=100 -workers=8 -detect_leaks=0 >/dev/null
 ## What bugs have been found? Can you replay the bug with chocolate-doom, not with the fuzz target?
 No bugs have been found
 ## Did you manage to compile the game and play it on your local machine (Not inside Docker)?
