@@ -97,7 +97,8 @@ char *fuzziwadfile;
 //
 // D_DoomMain
 //
-static boolean D_AddFile(char *filename) {
+static boolean D_AddFile(char *filename)
+{
   wad_file_t *handle;
 
   printf(" adding %s\n", filename);
@@ -106,9 +107,11 @@ static boolean D_AddFile(char *filename) {
   return handle != NULL;
 }
 
-static void LoadIwadDeh(void) {
+static void LoadIwadDeh(void)
+{
   // The Freedoom IWADs have DEHACKED lumps that must be loaded.
-  if (gamevariant == freedoom || gamevariant == freedm) {
+  if (gamevariant == freedoom || gamevariant == freedm)
+  {
     // Old versions of Freedoom (before 2014-09) did not have technically
     // valid DEHACKED lumps, so ignore errors and just continue if this
     // is an old IWAD.
@@ -116,7 +119,8 @@ static void LoadIwadDeh(void) {
   }
 }
 
-static void InitGameVersion(void) {
+static void InitGameVersion(void)
+{
   gameversion = exe_doom_1_9;
   gamemission = doom2;
 }
@@ -126,10 +130,12 @@ extern const uint8_t *g_fuzz_data;
 extern size_t g_fuzz_size;
 
 /** Entry point for the fuzzer */
-int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
+{
   // set longjmp. Execution goes here if the main program is about to exit
   // we trap this and return from the function instead
-  if (setjmp(g_jmp_buf)) {
+  if (setjmp(g_jmp_buf))
+  {
     return 0;
   }
 
@@ -193,7 +199,8 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
   // Disable automatic loading of Dehacked patches for certain
   // IWAD files.
   //
-  if (!M_ParmExists("-nodeh")) {
+  if (!M_ParmExists("-nodeh"))
+  {
     // Some IWADs have dehacked patches that need to be loaded for
     // them to be played properly.
     LoadIwadDeh();
@@ -207,9 +214,24 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
   // We have modified DooM so that any file with 'fuzz' in its name
   // is loaded from the global fuzz data g_fuzz_data
   char *filename = "fuzz.wad";
-
+  W_Reload();
   DEH_printf("Fuzzing with file: %s\n", filename);
-  if (!W_AddFile(filename)) {
+  if (!W_AddFile(filename))
+  {
+    return 0;
+  }
+  char *filename2 = "~fuzz.wad";
+
+  DEH_printf("Fuzzing with file: %s\n", filename2);
+  if (!W_AddFile(filename2))
+  {
+    return 0;
+  }
+  char *filename3 = "~fuzz";
+
+  DEH_printf("Fuzzing with file: %s\n", filename3);
+  if (!W_AddFile(filename3))
+  {
     return 0;
   }
 
@@ -219,13 +241,14 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
   savegamedir = M_GetSaveGameDir(D_SaveGameIWADName(gamemission, gamevariant));
 
   // Check for -file in shareware
-  if (modifiedgame && (gamevariant != freedoom)) {
+  if (modifiedgame && (gamevariant != freedoom))
+  {
     // These are the lumps that will be checked in IWAD,
     // if any one is not present, execution will be aborted.
-    char name[23][8] = {"e2m1",   "e2m2",   "e2m3",    "e2m4",   "e2m5",
-                        "e2m6",   "e2m7",   "e2m8",    "e2m9",   "e3m1",
-                        "e3m3",   "e3m3",   "e3m4",    "e3m5",   "e3m6",
-                        "e3m7",   "e3m8",   "e3m9",    "dphoof", "bfgga0",
+    char name[23][8] = {"e2m1", "e2m2", "e2m3", "e2m4", "e2m5",
+                        "e2m6", "e2m7", "e2m8", "e2m9", "e3m1",
+                        "e3m3", "e3m3", "e3m4", "e3m5", "e3m6",
+                        "e3m7", "e3m8", "e3m9", "dphoof", "bfgga0",
                         "heada1", "cybra1", "spida1d1"};
     int i;
 
@@ -237,7 +260,8 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
           I_Error(DEH_String("\nThis is not the registered version."));
   }
 
-  if (W_CheckNumForName("SS_START") >= 0 || W_CheckNumForName("FF_END") >= 0) {
+  if (W_CheckNumForName("SS_START") >= 0 || W_CheckNumForName("FF_END") >= 0)
+  {
     I_PrintDivider();
     printf(" WARNING: The loaded WAD file contains modified sprites or\n"
            " floor textures.  You may want to use the '-merge' command\n"
