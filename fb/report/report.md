@@ -1,7 +1,7 @@
 # REPORT
 
 ## Personal Information
-- Student Name: Letian Zhang
+- Student Name: Leo Zhang
 - Student ID: 20755564
 - WatID: l536zhan
 
