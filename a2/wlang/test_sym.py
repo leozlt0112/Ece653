@@ -23,6 +23,12 @@
 import unittest
 
 from . import ast, sym
+import z3 
+import sys
+import io
+from unittest.mock import patch
+
+
 
 
 class TestSym (unittest.TestCase):
@@ -148,15 +154,33 @@ class TestSym (unittest.TestCase):
         st = sym.SymState()
         out = [s for s in engine.run(ast1, st)]
         self.assertEquals(len(out),1)
-    
-    """
-    def test_9(self):
-        prg1 = 'havoc x,y;while x > 0 do {while y > 0 do {y := y - 1};x := x -1}'
-        ast1 = ast.parse_string(prg1)
-        engine = sym.SymExec()
-        st = sym.SymState()
-        out = [s for s in engine.run(ast1, st)]
-        self.assertEquals(len(out), 111)
-    """
 
+    def test_solver_initialization(self):
+        # Create an instance of SymState without providing a solver
+        state = sym.SymState(solver=[])
+    def test_is_error(self):
+        state= sym.SymState()
+        state.is_error()
+    def test_extra2(self):
+        st = sym.SymState()
+        st2 = sym.SymState()
+        st.env['x'] = z3.Int('x')
+        r = z3.IntVal(4) > z3.IntVal(1)
+        st._solver.add(r)
+        st.pick_concerete()
+        r = z3.IntVal(1) > z3.IntVal(1)
+        st2._solver.add(r)
+        st2.pick_concerete()
+    def test_repr(self):
+        st = sym.SymState()
+        repr(st)
+    def test_smt2(self):
+        st = sym.SymState()
+        st.to_smt2()
+    
+    @patch('sys.argv', ['wlang.sym', 'wlang/test1.prg'])
+    def test_main1(self):
+        self.assertEqual(sym.main(),0)
+
+    
     
