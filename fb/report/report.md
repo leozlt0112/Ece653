@@ -27,10 +27,16 @@ cmake -DCMAKE_C_COMPILER=clang-10 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
   ../ -GNinja
 ninja
 ```
-I Generate the coverage report and disabled leak detection
 
 ## What have been done to increase the coverage
-To increase coverage, I downloaded Simulacrum.wad,stn-flwr20x6.wad and stone-flower.wad from https://www.doomworld.com/idgames/. I imported them into a folder called SEED. I created a folder called CORPUS. After the build step is done, i ran with the following commands
+I disable leak detection and set the fuzzer profile output format.
+
+To increase coverage, I downloaded Simulacrum.wad,stn-flwr20x6.wad and stone-flower.wad from https://www.doomworld.com/idgames/. 
+
+I imported them into a folder called SEED. 
+
+I created a folder called CORPUS. 
+After the build step is done, i ran with the following commands
 ```shell
 export ASAN_OPTIONS=detect_leaks=0 
 #set the fuzzer profile output format
