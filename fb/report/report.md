@@ -33,10 +33,7 @@ I disable leak detection and set the fuzzer profile output format.
 
 To increase coverage, I downloaded Simulacrum.wad,stn-flwr20x6.wad and stone-flower.wad from https://www.doomworld.com/idgames/. 
 
-I imported them into a folder called SEED. 
-
-I created a folder called CORPUS. 
-After the build step is done, i ran with the following commands
+I imported them into a folder called SEED. I created a folder called CORPUS. After the build step is done, i ran with the following commands
 ```shell
 export ASAN_OPTIONS=detect_leaks=0 
 #set the fuzzer profile output format
@@ -57,7 +54,7 @@ llvm-cov-10 export ./src/doom_fuzz -instr-profile=default.profdata -format=lcov 
 lcov -a src.info -o src_report.info
 # generate a html visualization of the same report
 genhtml -o html_output src_report.info
-'''
+```
 I am able to have coverage of above 80 for lines in both chocolate-doom/src/doom/p_setup.c and hocolate-doom/src/w_wad.c
 ## What bugs have been found? Can you replay the bug with chocolate-doom, not with the fuzz target?
 No bugs have been found
