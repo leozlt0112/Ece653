@@ -214,23 +214,9 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
   // We have modified DooM so that any file with 'fuzz' in its name
   // is loaded from the global fuzz data g_fuzz_data
   char *filename = "fuzz.wad";
-  W_Reload();
+
   DEH_printf("Fuzzing with file: %s\n", filename);
   if (!W_AddFile(filename))
-  {
-    return 0;
-  }
-  char *filename2 = "~fuzz.wad";
-
-  DEH_printf("Fuzzing with file: %s\n", filename2);
-  if (!W_AddFile(filename2))
-  {
-    return 0;
-  }
-  char *filename3 = "~fuzz";
-
-  DEH_printf("Fuzzing with file: %s\n", filename3);
-  if (!W_AddFile(filename3))
   {
     return 0;
   }
