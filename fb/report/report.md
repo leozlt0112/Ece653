@@ -34,7 +34,9 @@ I disable leak detection and set the fuzzer profile output format.
 To increase coverage, I downloaded Simulacrum.wad,stn-flwr20x6.wad and stone-flower.wad from https://www.doomworld.com/idgames/. 
 
 I imported them into a folder called SEED. I created a folder called CORPUS. After the build step is done, i ran with the following commands
+
 More details in comments below
+
 ```shell
 export ASAN_OPTIONS=detect_leaks=0 
 #set the fuzzer profile output format
