@@ -17,8 +17,9 @@ method CalcTerm(m: int, n: nat) returns (res: int)
   res := 0;
 
   while (m1!=0)
-    invariant true
-    decreases 0
+    invariant 0 <= m1 <=abs(m);
+    invariant res == (abs(m) - m1) *5
+    decreases m1
   {
     res := res+5;
     m1 := m1-1;
@@ -27,8 +28,9 @@ method CalcTerm(m: int, n: nat) returns (res: int)
   if (m<0) { res := -res; }
 
   while (n1!=0)
-    invariant true
-    decreases 0
+    invariant res == m*5 - (n-n1)*3
+    decreases n1
+
   {
     res := res-3;
     n1 := n1-1;

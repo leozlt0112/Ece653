@@ -10,14 +10,14 @@ method slow_max(a: nat, b: nat) returns (z: nat)
   var x := a;
   var y := b;
   while (z < x && z < y)
-    invariant true 
-    decreases 0
+    invariant z == b-y && z == a -x
+    decreases if (x > y) then x-z else y-z
   {
     z := z + 1;
     x := x - 1;
     y := y - 1;
   }
 
- if (x <= y) { return b; }
- else { return a;}
+  if (x <= y) { return b; }
+  else { return a;}
 }
