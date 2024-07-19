@@ -27,3 +27,18 @@ method MultipleReturns(x: int, y: int) returns (more: int, less:int)
   less := x-y;
 
 }
+method ffff(x: int) returns (more:int)
+
+  requires x > 0
+  ensures more==x
+{
+  var i := 0;
+  var n := x; // Assuming n is meant to be x or some other defined variable
+  while i < n
+    invariant 0<=i<=n
+    decreases n - i;
+  {
+    i := i + 1;
+  }
+  return i;
+}
