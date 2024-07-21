@@ -143,17 +143,14 @@ class SymExec(ast.AstVisitor):
             assert len(kids) == 1
             return z3.Not(kids[0])
 
-        fn = None
-        base = None
-        if node.op == "and":
-            fn = lambda x, y: z3.And(x,y)
-            base = z3.BoolVal(True)
+        
+        elif node.op == "and":
+            return z3.And(*kids)
         elif node.op == "or":
-            fn = lambda x, y: z3.Or(x,y)
-            base = z3.BoolVal(False)
+            return z3.And(*kids)
 
-        assert fn is not None
-        return reduce(fn, kids, base)
+        else:
+            assert False
 
     def visit_AExp(self, node, *args, **kwargs):
         kids = [self.visit(a, *args, **kwargs) for a in node.args]
@@ -217,19 +214,19 @@ class SymExec(ast.AstVisitor):
 
     def visit_WhileStmt(self, node, *args, **kwargs):
         counter = kwargs.get('counter',0)
-        print("Visited while stmt")
+        """print("Visited while stmt")"""
         new_states=[]
         state = kwargs['state']
         if(node.inv):
             assert_inv_states = []
-            print("Entered node inv")
+            """print("Entered node inv")"""
             cond = self.visit(node.inv, state=state)
-            print("Left node inv")
+            #print("Left node inv")
             passed_state,failed_state = state.fork()
-            print("Pass node Fail")
+            #print("Pass node Fail")
 
             failed_state.add_pc(z3.Not(cond))
-            print("Failed state from assert")
+            #print("Failed state from assert")
 
             if not failed_state.is_empty():
                 print("Assertion might fail", failed_state)
@@ -242,8 +239,8 @@ class SymExec(ast.AstVisitor):
                 vistor.check(node.body)
                 vars=vistor.get_defs()
                 for v in vars:
-                    assert_inv_state.env[v.name] = z3.Int(v.name)
-                print("havoc visitor")
+                    assert_inv_state.env[v.name] = z3.FreshInt(v.name)
+                #print("havoc visitor")
                 cond = self.visit(node.inv, state=assert_inv_state)
                 assert_inv_state.add_pc(cond)
                 """line break"""
@@ -257,18 +254,20 @@ class SymExec(ast.AstVisitor):
                 if not passed_state.is_empty():
                     then_states=self.visit(node.body,state=passed_state)
                     for state in then_states:
-                        print("for loop")
+                        #print("for loop")
                         cond = self.visit(node.inv, state=state)
                         passed_state,failed_state = state.fork()
                         failed_state.add_pc(z3.Not(cond))
                         if not failed_state.is_empty():
                             print("Assertion might fail", failed_state) 
-                print("after for loop")
+                        
+                        passed_state.add_pc(cond)
+                        #if not passed_state.is_empty():
+                            #new_states.append(passed_state) 
+                #print("after for loop")
+                return new_states
         else:
-            new_states.append(kwargs['state'])
-        new_new_states = []
-        print("length",len(new_states))
-        for state in new_states:
+            counter = kwargs.get('counter',0)
             if counter == 10:
                 cond = self.visit(node.cond, state=state)
                 new_failed_state = []
@@ -281,14 +280,14 @@ class SymExec(ast.AstVisitor):
             failed_state.add_pc(z3.Not(cond))
             if not failed_state.is_empty():
                 failed_state = [failed_state]
-                new_new_states.extend(failed_state)
+                new_states.extend(failed_state)
             passed_state.add_pc(cond)
             if not passed_state.is_empty() and counter < 10:
                 st = self.visit(node.body, state=passed_state)
                 for state in st:
                     new_state_from_body=self.visit(node, state=state, counter=counter+1)
-                    new_new_states.extend(new_state_from_body)
-        return new_new_states
+                    new_states.extend(new_state_from_body)
+            return new_states
     
     def visit_AssertStmt(self, node, *args, **kwargs):
         # Don't forget to print an error message if an assertion might be violated
@@ -318,7 +317,7 @@ class SymExec(ast.AstVisitor):
     def visit_HavocStmt(self, node, *args, **kwargs):
         st = kwargs["state"]
         for v in node.vars:
-             st.env[v.name] = z3.Int(v.name)
+             st.env[v.name] = z3.FreshInt(v.name)
         return [st]
 
         
