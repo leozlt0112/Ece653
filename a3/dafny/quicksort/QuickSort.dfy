@@ -16,16 +16,14 @@ method qsort(a:array<int>, l:nat, u:nat)
   decreases u - l
 
 
-  // complete the code for quicksort and verify the implementation
 {
   if (l < u) {
     var pivot := partition(a, l, u);
     assert forall i :: l <= i < pivot ==> a[i] <= a[pivot];
     if (pivot > l) {
-      qsort(a, l, pivot-1); // Recursive call on the left part only if pivot is greater than l
+      qsort(a, l, pivot-1);
     }
     if (pivot < u) {
-      // Recursive call on the right part only if pivot is less than u
       qsort(a, pivot + 1, u);
     }
   }
