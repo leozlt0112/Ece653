@@ -14,10 +14,11 @@ method qsort(a:array<int>, l:nat, u:nat)
   ensures u < a.Length-1 ==> beq(old(a[..]), a[..], u+1, a.Length - 1);
   ensures u < a.Length - 1 ==> partitioned(a, l, u, u+1, a.Length-1);
   decreases u - l
-
-
 {
-  if (l < u) {
+  if (l >= u) {
+    return;
+  }
+  else{
     var pivot := partition(a, l, u);
     assert forall i :: l <= i < pivot ==> a[i] <= a[pivot];
     if (pivot > l) {
