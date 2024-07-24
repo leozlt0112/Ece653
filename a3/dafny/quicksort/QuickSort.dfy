@@ -21,11 +21,12 @@ method qsort(a:array<int>, l:nat, u:nat)
   else{
     var pivot := partition(a, l, u);
     assert forall i :: l <= i < pivot ==> a[i] <= a[pivot];
-    if (pivot > l) {
+    if (l < pivot){
       qsort(a, l, pivot-1);
     }
-    if (pivot < u) {
+    if (pivot<u){
       qsort(a, pivot + 1, u);
     }
+
   }
 }
