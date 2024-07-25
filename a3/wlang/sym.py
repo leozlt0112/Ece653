@@ -240,7 +240,6 @@ class SymExec(ast.AstVisitor):
                 vars=vistor.get_defs()
                 for v in vars:
                     assert_inv_state.env[v.name] = z3.FreshInt(v.name)
-                #print("havoc visitor")
                 cond = self.visit(node.inv, state=assert_inv_state)
                 assert_inv_state.add_pc(cond)
                 """line break"""
@@ -262,9 +261,7 @@ class SymExec(ast.AstVisitor):
                             print("Assertion might fail", failed_state) 
                         
                         passed_state.add_pc(cond)
-                        #if not passed_state.is_empty():
-                            #new_states.append(passed_state) 
-                #print("after for loop")
+                        
                 return new_states
         else:
             counter = kwargs.get('counter',0)

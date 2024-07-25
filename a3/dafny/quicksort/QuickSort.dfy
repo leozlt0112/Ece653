@@ -2,8 +2,8 @@ include "part.dfy"
 
 
 method qsort(a:array<int>, l:nat, u:nat)
-  requires a.Length > 0
   requires a!= null
+  requires a.Length > 0
   requires l <= u < a.Length;
   requires l>0 ==> partitioned(a, 0, l-1, l, u);
   requires u+1 <= a.Length -1 ==> partitioned(a, l, u, u+1, a.Length-1);
