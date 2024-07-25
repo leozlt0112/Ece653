@@ -25,7 +25,7 @@ method CalcTerm(m: int, n: nat) returns (res: int)
     m1 := m1-1;
   }
 
-  if (m<0) { res := -res; }
+  if (m < 0) { res := -res; }
 
   while (n1!=0)
     invariant res == m*5 - (n-n1)*3

@@ -42,9 +42,10 @@ method partition(a:array<int>, l:nat, u:nat) returns (pivot:int)
     invariant forall k :: i < k < j ==> a[k] > pv
     invariant a[u] == pv
     invariant forall k :: u < k < a.Length ==> a[k] == old(a[k])
-    invariant !(l <= 0) ==> partitioned(a, 0, l-1, l, u)
-    invariant !(u >= (a.Length - 1)) ==> partitioned(a, l, u, u+1, a.Length-1)
-    invariant !(l <= 0) ==> beq(old(a[..]), a[..], 0, l-1)
+    invariant l > 0 ==> beq(old(a[..]), a[..], 0, l-1)
+    invariant l > 0 ==> partitioned(a, 0, l-1, l, u)
+    invariant u < a.Length - 1 ==> partitioned(a, l, u, u+1, a.Length-1)
+
 
 
   {
