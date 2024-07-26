@@ -178,7 +178,7 @@ class TestSym (unittest.TestCase):
         out = [s for s in engine.run(ast1, st)]
         self.assertEquals(len(out),0)
     def test_21(self):
-        prg1 = 'x := 10; while true inv x>11 do x:=x-1'
+        prg1 = 'y := 1; while true inv y>110 do y:=y-y'
         ast1 = ast.parse_string(prg1)
         engine = sym.SymExec()
         st = sym.SymState()
