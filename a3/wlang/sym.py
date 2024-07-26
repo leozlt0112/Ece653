@@ -262,7 +262,7 @@ class SymExec(ast.AstVisitor):
                         
                         passed_state.add_pc(cond)
                         
-                return new_states
+            return new_states
         else:
             counter = kwargs.get('counter',0)
             if counter == 10:

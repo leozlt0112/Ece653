@@ -177,6 +177,34 @@ class TestSym (unittest.TestCase):
         st = sym.SymState()
         out = [s for s in engine.run(ast1, st)]
         self.assertEquals(len(out),0)
+    def test_21(self):
+        prg1 = 'x := 10; while true inv x>11 do x:=x-1'
+        ast1 = ast.parse_string(prg1)
+        engine = sym.SymExec()
+        st = sym.SymState()
+        out = [s for s in engine.run(ast1, st)]
+        self.assertEquals(len(out),0)
+    def test_23(self):
+        prg1 = 'havoc x, y;assume y >= 0;c := 0;r := x;while c < y inv c <= y and r = x+c do {r := r + 1;c := c + 1}; assert r = x + y'
+        ast1 = ast.parse_string(prg1)
+        engine = sym.SymExec()
+        st = sym.SymState()
+        out = [s for s in engine.run(ast1, st)]
+        self.assertEquals(len(out),1)
+    def test_24(self):
+        prg1 = 'x:=0;z:=2;y:=2;while z>1 inv y >= 1 do { x:= x - 1;y := y - 1}'
+        ast1 = ast.parse_string(prg1)
+        engine = sym.SymExec()
+        st = sym.SymState()
+        out = [s for s in engine.run(ast1, st)]
+        self.assertEquals(len(out),0)
+    def test_25(self):
+        prg1 = 'x:=0;z:=2;y:=2;while z>3 inv y >= 1 do { x:= x - 1;y := y - 1}'
+        ast1 = ast.parse_string(prg1)
+        engine = sym.SymExec()
+        st = sym.SymState()
+        out = [s for s in engine.run(ast1, st)]
+        self.assertEquals(len(out),1)
     def test_solver_initialization(self):
         # Create an instance of SymState without providing a solver
         state = sym.SymState(solver=[])
