@@ -185,7 +185,7 @@ class TestSym (unittest.TestCase):
         out = [s for s in engine.run(ast1, st)]
         self.assertEquals(len(out),0)
     def test_23(self):
-        prg1 = 'havoc x, y;assume y >= 0;c := 0;r := x;while c < y inv c <= y and r = x+c do {r := r + 1;c := c + 1}; assert r = x + y'
+        prg1 = 'havoc x, y;assume y >= 0;c := 0;r := x;while c < y inv c <= y and r = x+c and c>=0 do {r := r + 1;c := c + 1}; assert r = x + y'
         ast1 = ast.parse_string(prg1)
         engine = sym.SymExec()
         st = sym.SymState()
