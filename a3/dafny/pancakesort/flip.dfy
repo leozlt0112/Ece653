@@ -2,6 +2,8 @@ method flip(a: array<int>, num: int)
   modifies a
   requires a.Length > 0
   requires 0 <= num < a.Length
+  ensures  multiset(a[..]) == multiset(old(a[..]))
+
   ensures forall i :: 0 <= i <= num ==> a[i] == old(a[num - i])
   ensures forall i :: num < i <a.Length ==> a[i] == old(a[i])
 
@@ -14,6 +16,7 @@ method flip(a: array<int>, num: int)
     invariant 0 <= i <= num
     invariant 0 <= j <= num
     invariant i + j == num
+    invariant multiset(a[..]) == multiset(old(a[..]))
     invariant forall k :: 0 <= k < i ==> a[k] == old(a[num - k])
     invariant forall k :: j < k <= num ==> a[k] == old(a[num - k])
     invariant forall k :: i<=k<=j ==> a[k] == old(a[k])
